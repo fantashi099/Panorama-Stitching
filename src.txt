@@ -1,0 +1,3 @@
+https://docs.opencv.org/master/da/df5/tutorial_py_sift_intro.html
+https://viblo.asia/p/image-stitching-thuat-toan-dang-sau-cong-nghe-anh-panorama-LzD5dee4KjY
+https://github.com/linrl3/Image-Stitching-OpenCV
