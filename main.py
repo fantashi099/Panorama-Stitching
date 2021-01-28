@@ -4,7 +4,7 @@ import imutils
 
 # Read Images
 img_src1 = cv2.imread('images/a2.jpg')
-img_src2 = cv2.imread('images/a3.jpg')
+img_src2 = cv2.imread('images/a1.jpg')
 # img_src1 = cv2.imread('http://www.ic.unicamp.br/~helio/imagens_registro/foto1A.jpg')
 # img_src2 = cv2.imread('http://www.ic.unicamp.br/~helio/imagens_registro/foto1B.jpg')
 
@@ -26,7 +26,7 @@ search_params = dict(checks = 50)
 match = cv2.FlannBasedMatcher(index_params, search_params)
 rawMatches = match.knnMatch(des1,des2,k=2)
 good_matches = []
-ratio_thresh = 0.7
+ratio_thresh = 0.85
 
 for x, y in rawMatches:
     if x.distance < y.distance * ratio_thresh:
@@ -93,6 +93,6 @@ c = max(contours, key = cv2.contourArea)
 final_result = final_result[y:y + h, x:x + w]
 
 
-cv2.imshow('Show Panorama Image', mask)
+cv2.imshow('Show Panorama Image', thresh)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
