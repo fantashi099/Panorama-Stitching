@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital@1&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static',filename='images/cat.ico') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <title>Panorama</title>
+  </head>
+  <body>
+    <header>
+      <a href="#" class="logo">
+        <img class="logo-img" src="{{ url_for('static',filename='images/main-logo.png') }}" alt="logo">
+      </a>
+      <nav>
+        <ul class="nav_link">
+          <li><a href="/">Home</a></li>
+          <li><a>About</a></li>
+          <li><a>Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+    <section id="main">
+      <div class="logo-container">
+
+        <img src="{{ url_for('static',filename='images/Panorama.png') }}" class="main-logo" alt="Panorama-logo">
+
+        <div id="describe">
+          <div class="file-upload" onclick="$('#input-images').trigger('click');">
+            <i class="fa fa-arrow-up"></i>
+          </div>
+        </div>
+
+      </div>
+
+      <form action="/display" method="post" enctype="multipart/form-data">
+        <div>
+
+          <div class="drop-container">
+            <input name="inputImages" multiple="multiple" type="file" id="input-images" accept="image/*" required>
+            <p id="dropzone">
+              Drag two or more images here or click button above...
+            </p>
+          </div>
+
+        </div>
+
+        <div class="button-submit">
+            <button class="btn" onclick="location.reload()" type="Reset" name="reset">Reset</button>
+            <button class="btn" type="submit" name="upload">Upload</button>
+            <a class="cta">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              Stitching
+            </a>
+        </div>
+      </form>
+
+    </section>
+
+    {% block main %}{% endblock %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{{ url_for('static',filename='js/index.js') }}" charset="utf-8"></script>
+  </body>
+</html>

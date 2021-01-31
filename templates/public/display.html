@@ -1,0 +1,24 @@
+{% extends "public/index.html" %}
+
+{% block main %}
+
+<section id="Display">
+  <div class="title">
+    <h1>Your Input Images:</h1>
+  </div>
+  <div class="list">
+
+    {% for x in lst_imgs %}
+
+    <div class="box">
+      <div class="display-img">
+        <img src="{{ x }}" class="list-img">
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+</section>
+
+
+{% endblock %}
