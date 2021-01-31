@@ -47,14 +47,13 @@
         </div>
 
         <div class="button-submit">
-            <button class="btn" onclick="location.reload()" type="Reset" name="reset">Reset</button>
-            <button class="btn" type="submit" name="upload">Upload</button>
-            <a class="cta">
+            <button class="btn" id="upload" type="submit" hidden>Upload</button>
+            <a class="cta" onclick="$('#upload').trigger('click');">
               <span></span>
               <span></span>
               <span></span>
               <span></span>
-              Stitching
+              Upload
             </a>
         </div>
       </form>

@@ -18,6 +18,20 @@
     {% endfor %}
 
   </div>
+
+  <a class="cta stitch" onclick="$('#stitching').trigger('click');">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    Stitching
+  </a>
+
+  <form action="stitch" method="post">
+    <input type="text" name="checked" value="stitch" hidden>
+    <input type="submit" name="stitch" id="stitching" hidden>
+  </form>
+
 </section>
 
 

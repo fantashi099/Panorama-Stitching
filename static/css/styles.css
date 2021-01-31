@@ -134,37 +134,8 @@ header {
   background-color: #e8e8e8;
 }
 
-/* Button submit */
-.btn {
-  border: 2px solid #30475e;
-  border-radius: 25px;
-  padding: 12px 28px;
-  margin: 2rem 0 2rem 0;
-  background-color: #e8e8e8;
-  color: #222831;
-}
 
-.btn:nth-child(2) {
-  border: 2px solid #9ad3bc;
-}
-
-.btn:nth-child(2):hover {
-  color: white;
-  background-color: #9ad3bc;
-}
-
-.btn:hover {
-  color: white;
-  background-color: #30475e;
-}
-
-.button-submit {
-  width: 40%;
-  margin: auto;
-  text-align: left;
-}
-
-/* Stitching Neon Buttton */
+/* Upload and Stitching Neon Buttton */
 .cta {
   padding: 14px 25px;
   position: relative;
@@ -174,10 +145,9 @@ header {
   text-decoration: none;
   overflow: hidden;
   transition: 0.2s;
-  top: 15px;
-  left: 12rem;
+  top: 2rem;
   background: #fff;
-  border-radius: 25px;
+  border: 1px solid #f05454;
 }
 
 .cta:hover {
@@ -259,7 +229,7 @@ header {
   background-color: #eeeeee;
 }
 
-#Display .title {
+.title {
   padding-top: 3%;
   font-size: 1.5rem;
 }
@@ -304,4 +274,42 @@ header {
   height: 100%;
   object-fit: cover;
   opacity: 0.8;
+}
+
+/* Stitching Neon */
+.stitch {
+  color: #fff;
+  background: #252525;
+  border: 1px solid #af0404;
+}
+
+.stitch:hover {
+  color: #fff;
+  background: #ef4339;
+  box-shadow: 0 0 10px #30475e, 0 0 40px #30475e, 0 0 80px #30475e;
+  transition-delay: 1s;
+}
+
+.stitch span:nth-child(1) {
+  background: linear-gradient(90deg,transparent,#ff0000);
+}
+
+.stitch span:nth-child(3) {
+  background: linear-gradient(270deg,transparent,#ff0000);
+}
+
+.stitch span:nth-child(2) {
+  background: linear-gradient(180deg,transparent,#ff0000);
+}
+
+.stitch span:nth-child(4) {
+  background: linear-gradient(360deg,transparent,#ff0000);
+}
+
+/* Output styles */
+#output {
+  padding-bottom: 5%;
+  box-sizing: border-box;
+  text-align: center;
+  background-color: #eeeeee;
 }

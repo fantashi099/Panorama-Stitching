@@ -5,6 +5,8 @@ import base64
 from io import BytesIO
 from PIL import Image
 
+input_arr = []
+
 def img_to_base64_str(img):
     buffered = BytesIO()
     img.save(buffered, format="PNG")
@@ -17,20 +19,42 @@ app = Flask(__name__)
 
 @app.route('/', methods = ['GET','POST'])
 def main():
+    global input_arr
+    input_arr = []
     return render_template('public/index.html')
 
-@app.route('/display', methods = ['POST'])
+@app.route('/display', methods = ['GET','POST'])
 def display():
     if (request.files):
 
+        global input_arr
         lst_imgs = request.files.getlist('inputImages')
         content = []
+        input_arr = []
         for x in lst_imgs:
             img = Image.open(x.stream)
             img_base64 = img_to_base64_str(img)
+
+            # Convert Pil Image to OpenCV Format for OpenCV Stitching
+            img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+            input_arr.append(img)
             content.append(img_base64)
         return render_template('public/display.html', lst_imgs = content)
 
+    else:
+        return redirect('/')
+
+@app.route('/stitch', methods = ['GET','POST'])
+def stitch():
+    if request.method == 'POST':
+
+        if request.form['checked'] == 'stitch':
+            global input_arr
+            print(input_arr)
+        return render_template('public/stitch.html')
+
+    else:
+        return redirect('/')
 
 if __name__ == '__main__':
     app.run(debug=True)
