@@ -4,6 +4,7 @@ import numpy as np
 import base64
 from io import BytesIO
 from PIL import Image
+from stitch import Stitch
 
 input_arr = []
 
@@ -50,8 +51,16 @@ def stitch():
 
         if request.form['checked'] == 'stitch':
             global input_arr
-            print(input_arr)
-        return render_template('public/stitch.html')
+            panorama = Stitch(input_arr)
+            img_match, kp, des, good_matches = panorama.detect_keypoint()
+            result = panorama.matching(kp, des, good_matches)
+            final_result = panorama.blending(result)
+
+            final_result = cv2.cvtColor(final_result, cv2.COLOR_BGR2RGB)
+            im_pil = Image.fromarray(final_result)
+            img_base64 = img_to_base64_str(im_pil)
+
+        return render_template('public/stitch.html', matched = img_base64)
 
     else:
         return redirect('/')
