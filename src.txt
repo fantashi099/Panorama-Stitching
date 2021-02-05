@@ -5,3 +5,4 @@ https://www.pyimagesearch.com/2018/12/17/image-stitching-with-opencv-and-python/
 https://www.pyimagesearch.com/2016/02/01/opencv-center-of-contour/
 https://crashlaker.github.io/python/2020/08/26/image_encode_decode_base64.html
 https://mono.software/2018/03/14/Image-stitching/
+https://stackoverflow.com/questions/24563173/stitch-multiple-images-using-opencv-python

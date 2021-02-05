@@ -210,7 +210,7 @@ class Stitch(object):
 
         if ( closestImage['inliers'] > 0.1 ): # and
 
-            (min_x, min_y, max_x, max_y) = self.findDimensions(closestImage['img'], H_inv)
+            (min_x, min_y, max_x, max_y) = self.findDimensions(closestImage['rgb'], H_inv)
 
             # Adjust max_x and max_y by base img size
             max_x = max(max_x, base_img.shape[1])
@@ -254,6 +254,7 @@ class Stitch(object):
             # cv2.destroyAllWindows()
 
             next_img_warp = cv2.warpPerspective(closestImage['rgb'], mod_inv_h, (img_w, img_h))
+
             # print "Warped next image"
 
             # utils.showImage(next_img_warp, scale=(0.2, 0.2), timeout=1000, save=True, title="next_img_warp")
@@ -313,7 +314,11 @@ class Stitch(object):
 
             # output
             final_filename = "%s/%d.JPG" % (self.output_dir, round)
-            cv2.imwrite('output-test.jpg', final_img)
+
+            cv2.imshow('output', final_img)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
+            cv2.imwrite('output-test2.jpg', final_img)
 
             return self.stitch(final_img, round+1)
 

@@ -17,12 +17,13 @@ class Stitch:
 
     def get_features(self, img):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        blur = cv2.GaussianBlur(gray,(5,5), 0)
         kp, des = self.sift.detectAndCompute(gray,None)
         return kp, des
 
     def match(self, des1, des2):
         matcher = cv2.FlannBasedMatcher(self.index_params, self.search_params)
-        rawMatches = matcher.knnMatch(des1,des2,k=2)
+        rawMatches = matcher.knnMatch(des2,des1,k=2)
 
         good_matches = []
         ratio_thresh = 0.85
@@ -34,8 +35,8 @@ class Stitch:
         return good_matches
 
     def homography(self, kp1, kp2, matches):
-        kp1 = [kp1[m.queryIdx] for m in matches]
-        kp2 = [kp2[m.trainIdx] for m in matches]
+        kp1 = [kp1[m.trainIdx] for m in matches]
+        kp2 = [kp2[m.queryIdx] for m in matches]
 
         pts1 = np.array([k.pt for k in kp1])
         pts2 = np.array([k.pt for k in kp2])
@@ -91,7 +92,7 @@ class Stitch:
 
         return min_x, min_y, max_x, max_y
 
-    def bundle_adjustment(self, reference_img, input_img, H_inv):
+    def image_align(self, reference_img, input_img, H_inv):
         min_x, min_y, max_x, max_y = self.find_shape(input_img, H_inv)
 
         # Adjust max_x and max_y by base img size
@@ -126,6 +127,9 @@ class Stitch:
         reference_img_warp = cv2.warpPerspective(reference_img, move_h, (img_w, img_h))
         input_img_warp = cv2.warpPerspective(input_img, mod_inv_h, (img_w, img_h))
 
+
+        input_img_warp = input_img_warp.astype('uint8')
+
         # Put the base image on an enlarged palette
         enlarged_reference_img = np.zeros((img_h, img_w, 3), np.uint8)
 
@@ -140,42 +144,60 @@ class Stitch:
         # add next image
         result = cv2.add(enlarged_reference_img, input_img_warp,dtype=cv2.CV_8U)
 
-        final_result = self.blending(result)
+        final_result = self.remove_seam(result)
 
         return final_result
 
-    def blending(self, img):
-        # Crop black edge
-        final_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        _, thresh = cv2.threshold(final_gray, 1, 255, cv2.THRESH_BINARY)
-        contours = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-        # print "Found %d contours..." % (len(contours))
 
-        max_area = 0
-        best_rect = (0,0,0,0)
+    def remove_seam(self, img):
 
-        cnt = imutils.grab_contours(contours)
-        cnt = max(cnt, key = cv2.contourArea)
+        gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+        gray = cv2.medianBlur(gray,3)
 
-        x,y,w,h = cv2.boundingRect(cnt)
+        ret,thresh = cv2.threshold(gray,1,255,0, cv2.THRESH_BINARY)
+        contours,hierarchy = cv2.findContours(thresh,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
 
-        deltaHeight = h-y
-        deltaWidth = w-x
+        contours = sorted(contours, key=lambda contour:len(contour), reverse=True)
+        roi = cv2.boundingRect(contours[0])
 
-        area = deltaHeight * deltaWidth
+        img = img[roi[1]:roi[3], roi[0]:roi[2]]
 
-        if ( area > max_area and deltaHeight > 0 and deltaWidth > 0):
-            max_area = area
-            best_rect = (x,y,w,h)
+        return img
 
-        if ( max_area > 0 ):
-            final_img_crop = img[best_rect[1]:best_rect[1]+best_rect[3],
-                    best_rect[0]:best_rect[0]+best_rect[2]]
+    def crop(self, img):
 
-            final_img = final_img_crop
+        final_result = cv2.copyMakeBorder(img, 10, 10 ,10 ,10,
+                    cv2.BORDER_CONSTANT, (0,0,0))
+        # Convert ảnh sang gray để chia ảnh
+        gray = cv2.cvtColor(final_result, cv2.COLOR_BGR2GRAY)
+        blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+        # Chia ảnh thành black - white (white là panorama)
+        thresh = cv2.threshold(blurred, 0, 255, cv2.THRESH_BINARY)[1]
 
-        return final_img
+        # Detect Cạnh viền
+        contours = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours = imutils.grab_contours(contours)
+        c = max(contours, key = cv2.contourArea)
 
+        mask = np.zeros(thresh.shape, dtype = 'uint8')
+        (x,y,w,h) = cv2.boundingRect(c)
+        cv2.rectangle(mask, (x, y), (x + w, y + h), 255, -1)
+
+        minRect = mask.copy()
+        sub = mask.copy()
+
+        while cv2.countNonZero(sub) > 0:
+
+            minRect = cv2.erode(minRect, None)
+            sub = cv2.subtract(minRect, thresh)
+
+        contours = cv2.findContours(minRect.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours = imutils.grab_contours(contours)
+        c = max(contours, key = cv2.contourArea)
+        (x, y, w, h) = cv2.boundingRect(c)
+        final_result = final_result[y:y + h, x:x + w]
+
+        return final_result
 
     def stitch(self):
 
@@ -194,12 +216,14 @@ class Stitch:
 
             if inlierRatio > 0.1:
 
-                final_img = self.bundle_adjustment(reference_img, input_img, H_inv)
-            reference_img = final_img
+                final_img = self.image_align(reference_img, input_img, H_inv)
+
+                reference_img = final_img
 
         return reference_img
 
+
     def fit_transform(self):
         output = self.stitch()
-        # cv2.imwrite('output.jpg', output)
+        cv2.imwrite('output.jpg', output)
         return output

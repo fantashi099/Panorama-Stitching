@@ -1,0 +1,15 @@
+{% extends "public/index.html" %}
+
+{% block main %}
+
+<section id="test">
+  <div class="title">
+    <h1>Your Output Images:</h1>
+  </div>
+  <div class="imgbox">
+    <img src="{{ url_for('static',filename='images/Panorama.png') }}" alt="" class="output-display">
+    <img src="{{ url_for('static',filename='images/Panorama.png') }}" alt="" class="output-display">
+  </div>
+</section>
+
+{% endblock %}

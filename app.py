@@ -52,16 +52,25 @@ def stitch():
         if request.form['checked'] == 'stitch':
             global input_arr
             panorama = Stitch(input_arr)
-            final_result = panorama.fit_transform()
+            result = panorama.fit_transform()
+            final_result = panorama.crop(result)
+
+            result = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
+            im_pil_result = Image.fromarray(result)
+            img_base64_result = img_to_base64_str(im_pil_result)
 
             final_result = cv2.cvtColor(final_result, cv2.COLOR_BGR2RGB)
             im_pil = Image.fromarray(final_result)
             img_base64 = img_to_base64_str(im_pil)
 
-        return render_template('public/stitch.html', matched = img_base64)
+        return render_template('public/stitch.html', matched = img_base64, raw = img_base64_result)
 
     else:
         return redirect('/')
+
+@app.route('/test', methods = ['GET','POST'])
+def test():
+    return render_template('public/test.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

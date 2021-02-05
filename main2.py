@@ -10,7 +10,7 @@ import imutils
 # img_dir = list(filter(lambda x: x[-6:]!= img_path[1], img_dir))
 # print(img_dir)
 
-fpath = './images/test3'
+fpath = './images/test4'
 img_dir = os.listdir(fpath)
 img_dir = [os.path.join(fpath, file) for file in img_dir]
 center = int(len(img_dir)/2)
@@ -37,7 +37,7 @@ while len(img_dir) > 0:
     kp2, des2 = sift.detectAndCompute(next_img,None)
 
     match = cv2.FlannBasedMatcher(index_params, search_params)
-    rawMatches = match.knnMatch(des1,des2,k=2)
+    rawMatches = match.knnMatch(des2,des1,k=2)
 
     good_matches = []
     ratio_thresh = 0.85
@@ -54,8 +54,8 @@ while len(img_dir) > 0:
     #
     # meanPointDistance = sumDistance/float(len(good_matches))
 
-    kp1 = [kp1[m.queryIdx] for m in good_matches]
-    kp2 = [kp2[m.trainIdx] for m in good_matches]
+    kp1 = [kp1[m.trainIdx] for m in good_matches]
+    kp2 = [kp2[m.queryIdx] for m in good_matches]
 
     pts1 = np.array([k.pt for k in kp1])
     pts2 = np.array([k.pt for k in kp2])
@@ -143,7 +143,13 @@ while len(img_dir) > 0:
 
         # Warp the new image given the homography from the old image
         base_img_warp = cv2.warpPerspective(base_img, move_h, (img_w, img_h))
+
         next_img_warp = cv2.warpPerspective(next_img, mod_inv_h, (img_w, img_h))
+
+        # cv2.imshow('base', cv2.resize(base_img_warp,(500,500)))
+        # cv2.imshow('next', cv2.resize(next_img_warp,(500,500)))
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
 
         # Put the base image on an enlarged palette
         enlarged_base_img = np.zeros((img_h, img_w, 3), np.uint8)
@@ -151,6 +157,10 @@ while len(img_dir) > 0:
         # Create masked composite
         (ret,data_map) = cv2.threshold(cv2.cvtColor(next_img_warp, cv2.COLOR_BGR2GRAY),
             0, 255, cv2.THRESH_BINARY)
+
+        # cv2.imshow('output', np.hstack((base_img_warp[:,:img_w], next_img_warp[:,img_w]))
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
 
         # add base image
         enlarged_base_img = cv2.add(enlarged_base_img, base_img_warp,
@@ -189,6 +199,13 @@ while len(img_dir) > 0:
             final_img = final_img_crop
 
         base_img = final_img
+
+        rows, cols = np.where(base_img[:, :, 0] != 0)
+        min_row, max_row = min(rows), max(rows) + 1
+        min_col, max_col = min(cols), max(cols) + 1
+        base_img = base_img[min_row:max_row, min_col:max_col, :]
+
+
 
 
 # cv2.imshow('test', result)

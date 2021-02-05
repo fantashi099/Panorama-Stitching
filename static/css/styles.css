@@ -315,12 +315,14 @@ header {
 }
 
 .imgbox {
-  display: grid;
-  height: 100%;
+  margin: 2% 0 2%;
+}
+
+.output-display {
+  margin: auto;
+  max-width: 80%;
 }
 
 #panorama {
-  max-width: 80%;
-  max-height: 80vh;
   margin: auto;
 }

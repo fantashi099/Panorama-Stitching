@@ -1,10 +1,10 @@
 import cv2
 import numpy as np
-# import imutils
+import imutils
 
 # Read Images
-img_src1 = cv2.imread('output.jpg')
-img_src2 = cv2.imread('output2.jpg')
+img_src1 = cv2.imread('images/test2/a2.jpg')
+img_src2 = cv2.imread('images/test2/a1.jpg')
 # img_src1 = cv2.imread('http://www.ic.unicamp.br/~helio/imagens_registro/foto1A.jpg')
 # img_src2 = cv2.imread('http://www.ic.unicamp.br/~helio/imagens_registro/foto1B.jpg')
 
@@ -61,38 +61,45 @@ min_col, max_col = min(cols), max(cols) + 1
 final_result = result[min_row:max_row, min_col:max_col, :]
 
 # # Tạo rìa border panorama 10px đen
-# final_result = cv2.copyMakeBorder(final_result, 10, 10 ,10 ,10,
-#             cv2.BORDER_CONSTANT, (0,0,0))
-# # Convert ảnh sang gray để chia ảnh
-# gray = cv2.cvtColor(final_result, cv2.COLOR_BGR2GRAY)
-# blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-# # Chia ảnh thành black - white (white là panorama)
-# thresh = cv2.threshold(blurred, 0, 255, cv2.THRESH_BINARY)[1]
-#
-# # Detect Cạnh viền
-# contours = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-# contours = imutils.grab_contours(contours)
-# c = max(contours, key = cv2.contourArea)
-#
-# mask = np.zeros(thresh.shape, dtype = 'uint8')
-# (x,y,w,h) = cv2.boundingRect(c)
-# cv2.rectangle(mask, (x, y), (x + w, y + h), 255, -1)
-#
-# minRect = mask.copy()
-# sub = mask.copy()
-#
-# while cv2.countNonZero(sub) > 0:
-#     minRect = cv2.erode(minRect, None)
-#     sub = cv2.subtract(minRect, thresh)
-#
-# contours = cv2.findContours(minRect.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-# contours = imutils.grab_contours(contours)
-# c = max(contours, key = cv2.contourArea)
-# (x, y, w, h) = cv2.boundingRect(c)
-# final_result = final_result[y:y + h, x:x + w]
+final_result = cv2.copyMakeBorder(final_result, 10, 10 ,10 ,10,
+            cv2.BORDER_CONSTANT, (0,0,0))
+# Convert ảnh sang gray để chia ảnh
+gray = cv2.cvtColor(final_result, cv2.COLOR_BGR2GRAY)
+blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+# Chia ảnh thành black - white (white là panorama)
+thresh = cv2.threshold(blurred, 0, 255, cv2.THRESH_BINARY)[1]
+
+# Detect Cạnh viền
+contours = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+contours = imutils.grab_contours(contours)
+c = max(contours, key = cv2.contourArea)
+
+mask = np.zeros(thresh.shape, dtype = 'uint8')
+(x,y,w,h) = cv2.boundingRect(c)
+cv2.rectangle(mask, (x, y), (x + w, y + h), 255, -1)
+
+minRect = mask.copy()
+
+sub = mask.copy()
+
+count_temp = 0
+while count_temp < 20:
+    count_temp += 1
+    minRect = cv2.erode(minRect, None)
+    sub = cv2.subtract(minRect, thresh)
+    # cv2.imshow('Show Panorama Image', sub)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
+contours = cv2.findContours(minRect.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+contours = imutils.grab_contours(contours)
+c = max(contours, key = cv2.contourArea)
+(x, y, w, h) = cv2.boundingRect(c)
+final_result = final_result[y:y + h, x:x + w]
 
 
 cv2.imshow('Show Panorama Image', final_result)
-cv2.imwrite('output3.jpg', final_result)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+cv2.imwrite('output3.jpg', final_result)
