@@ -1,10 +1,10 @@
 import cv2
 import numpy as np
-import imutils
+# import imutils
 
 # Read Images
-img_src1 = cv2.imread('images/p2.jpg')
-img_src2 = cv2.imread('images/p1.jpg')
+img_src1 = cv2.imread('output.jpg')
+img_src2 = cv2.imread('output2.jpg')
 # img_src1 = cv2.imread('http://www.ic.unicamp.br/~helio/imagens_registro/foto1A.jpg')
 # img_src2 = cv2.imread('http://www.ic.unicamp.br/~helio/imagens_registro/foto1B.jpg')
 
@@ -93,5 +93,6 @@ final_result = result[min_row:max_row, min_col:max_col, :]
 
 
 cv2.imshow('Show Panorama Image', final_result)
+cv2.imwrite('output3.jpg', final_result)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

@@ -52,9 +52,7 @@ def stitch():
         if request.form['checked'] == 'stitch':
             global input_arr
             panorama = Stitch(input_arr)
-            img_match, kp, des, good_matches = panorama.detect_keypoint()
-            result = panorama.matching(kp, des, good_matches)
-            final_result = panorama.blending(result)
+            final_result = panorama.fit_transform()
 
             final_result = cv2.cvtColor(final_result, cv2.COLOR_BGR2RGB)
             im_pil = Image.fromarray(final_result)

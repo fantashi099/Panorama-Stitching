@@ -313,3 +313,14 @@ header {
   text-align: center;
   background-color: #eeeeee;
 }
+
+.imgbox {
+  display: grid;
+  height: 100%;
+}
+
+#panorama {
+  max-width: 80%;
+  max-height: 80vh;
+  margin: auto;
+}
