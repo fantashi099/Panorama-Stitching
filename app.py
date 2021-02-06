@@ -17,68 +17,61 @@ def img_to_base64_str(img):
     img_str = "data:image/png;base64," + base64.b64encode(img_byte).decode()
     return img_str
 
-def create_app():
-    try:
+app = Flask(__name__)
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
 
-        app = Flask(__name__)
-        app.config['SESSION_PERMANENT'] = False
-        app.config['SESSION_TYPE'] = 'filesystem'
-        Session(app)
+@app.route('/', methods = ['GET','POST'])
+def main():
+    return render_template('public/index.html')
 
-        @app.route('/', methods = ['GET','POST'])
-        def main():
-            return render_template('public/index.html')
+@app.route('/display', methods = ['GET','POST'])
+def display():
+    if (request.files):
 
-        @app.route('/display', methods = ['GET','POST'])
-        def display():
-            if (request.files):
+        if "input_arr" not in session:
+            session["input_arr"] = []
+        lst_imgs = request.files.getlist('inputImages')
+        content = []
+        for x in lst_imgs:
+            img = Image.open(x.stream)
+            img_base64 = img_to_base64_str(img)
 
-                if "input_arr" not in session:
-                    session["input_arr"] = []
-                lst_imgs = request.files.getlist('inputImages')
-                content = []
-                for x in lst_imgs:
-                    img = Image.open(x.stream)
-                    img_base64 = img_to_base64_str(img)
+            # Convert Pil Image to OpenCV Format for OpenCV Stitching
+            img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+            session["input_arr"].append(img)
+            content.append(img_base64)
+        return render_template('public/display.html', lst_imgs = content)
 
-                    # Convert Pil Image to OpenCV Format for OpenCV Stitching
-                    img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-                    session["input_arr"].append(img)
-                    content.append(img_base64)
-                return render_template('public/display.html', lst_imgs = content)
+    else:
+        return redirect('/')
 
-            else:
-                return redirect('/')
+@app.route('/stitch', methods = ['GET','POST'])
+def stitch():
+    if request.method == 'POST':
+        # try:
+        if request.form['checked'] == 'stitch':
+            panorama = Stitch(session["input_arr"])
+            # print(session["input_arr"])
+            result = panorama.fit_transform()
+            final_result = panorama.crop(result)
 
-        @app.route('/stitch', methods = ['GET','POST'])
-        def stitch():
-            if request.method == 'POST':
-                # try:
-                if request.form['checked'] == 'stitch':
-                    panorama = Stitch(session["input_arr"])
-                    # print(session["input_arr"])
-                    result = panorama.fit_transform()
-                    final_result = panorama.crop(result)
+            result = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
+            im_pil_result = Image.fromarray(result)
+            img_base64_result = img_to_base64_str(im_pil_result)
 
-                    result = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
-                    im_pil_result = Image.fromarray(result)
-                    img_base64_result = img_to_base64_str(im_pil_result)
+            final_result = cv2.cvtColor(final_result, cv2.COLOR_BGR2RGB)
+            im_pil = Image.fromarray(final_result)
+            img_base64 = img_to_base64_str(im_pil)
 
-                    final_result = cv2.cvtColor(final_result, cv2.COLOR_BGR2RGB)
-                    im_pil = Image.fromarray(final_result)
-                    img_base64 = img_to_base64_str(im_pil)
+        return render_template('public/stitch.html', matched = img_base64, raw = img_base64_result)
 
-                return render_template('public/stitch.html', matched = img_base64, raw = img_base64_result)
-                # except:
-                #     return redirect('/')
-            return redirect('/')
+    return redirect('/')
 
-        @app.route('/about', methods = ['GET','POST'])
-        def about():
-            return render_template('public/about.html')
-    except Exception as e:
-        logging.exception(e)
+@app.route('/about', methods = ['GET','POST'])
+def about():
+    return render_template('public/about.html')
 
 if __name__ == '__main__':
-    app = create_app()
-    app.run(debug=True, port = int(os.environ.get("PORT",5000)), host = '0.0.0.0')
+    app.run(debug=True)
