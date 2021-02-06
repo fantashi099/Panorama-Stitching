@@ -16,8 +16,8 @@
       <nav>
         <ul class="nav_link">
           <li><a href="/">Home</a></li>
-          <li><a>About</a></li>
-          <li><a>Contact</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="https://github.com/fantashi099/Panorama-Stitching">Github</a></li>
         </ul>
       </nav>
     </header>
@@ -38,7 +38,7 @@
         <div>
 
           <div class="drop-container">
-            <input name="inputImages" multiple="multiple" type="file" id="input-images" accept="image/*" required>
+            <input name="inputImages" onchange="readURL(this)" multiple="multiple" type="file" id="input-images" accept="image/*" required>
             <p id="dropzone">
               Drag two or more images here or click button above...
             </p>
@@ -61,6 +61,12 @@
     </section>
 
     {% block main %}{% endblock %}
+
+    <div id="loading"> </div>
+
+    <footer>
+      Made with 😭 by <a href="https://www.facebook.com/fantashi68/">The Perfect Name</a>
+    </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{ url_for('static',filename='js/index.js') }}" charset="utf-8"></script>

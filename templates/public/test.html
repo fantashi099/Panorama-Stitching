@@ -6,9 +6,20 @@
   <div class="title">
     <h1>Your Output Images:</h1>
   </div>
-  <div class="imgbox">
-    <img src="{{ url_for('static',filename='images/Panorama.png') }}" alt="" class="output-display">
-    <img src="{{ url_for('static',filename='images/Panorama.png') }}" alt="" class="output-display">
+
+  <div class="row">
+    <div class="column-left">
+      <button class="btn" type="button" name="button">Raw Panorama <i class="fas fa-caret-right"></i></button>
+      <button class="btn"  type="button" name="button">Auto Crop Panorama<i class="fas fa-caret-right"></i></button>
+    </div>
+    <div class="column-right">
+      <div class="imgbox">
+        <img src="{{ url_for('static',filename='images/Panorama.png') }}" alt="output" id="test1" style="max-width:100%; margin: auto;">
+      </div>
+      <div class="imgbox">
+        <img src="{{ url_for('static',filename='images/Panorama.png') }}" alt="output" id="test2" style="max-width:100%; margin: auto;">
+      </div>
+    </div>
   </div>
 </section>
 

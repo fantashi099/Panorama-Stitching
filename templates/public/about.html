@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital@1&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static',filename='images/cat.ico') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <title>Panorama</title>
+  </head>
+  <body>
+    <header>
+      <a href="#" class="logo">
+        <img class="logo-img" src="{{ url_for('static',filename='images/main-logo.png') }}" alt="logo">
+      </a>
+      <nav>
+        <ul class="nav_link">
+          <li><a href="/">Home</a></li>
+          <li><a>About</a></li>
+          <li><a href="https://github.com/fantashi099/Panorama-Stitching">Github</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <section id="about">
+      <img src="{{ url_for('static',filename='images/Panorama.png') }}" class="main-logo" alt="Panorama-logo">
+      <div class="info-about">
+        <p>
+          Hi there 😸, this is my Computer Vision's final Project from University of Information Technology VNU-HCM.
+          Just drag your image input files to stitch images, click upload to confirm images you want to stitch
+          and click the stitch button. The stitching will take few times to process (if your images is high
+          resolution too high it may take a bit longer). The result will have original panorama (if your
+          images is warp perspective) and auto crop panorama (if your images straightening).
+        </p>
+        <br>
+        <p style="color: #f05454;">
+          The images must be in order, the order can be left to right or right to left.
+          If your images is 2k resolution, website may not render full images panorama.
+        </p>
+        <br>
+        <p>
+          Planning features: Unordered sequence images, blending images.
+        </p>
+        <br>
+        <p>Have fun! If you have any questions please contact me</p>
+      </div>
+
+      <!-- <div class="modal" style="text-align: justify;">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <form action="" method="post" enctype="text/plain">
+            <table>
+              <tr>
+                <td><label for="Name">Your name:</label></td>
+                <td><input type="text" name="name"></td>
+              </tr>
+              <tr>
+                <td><label for="mail">Email:</label></td>
+                <td><input type="text" name="mail"></td>
+              </tr>
+              <tr>
+                <td><label for="comment">Your message:</label></td>
+                <td><input type="text" name="comment" size="40"></td>
+              </tr>
+            </table>
+
+            <input type="submit" value="Send">
+            <input type="reset" value="Reset">
+
+          </form>
+        </div> -->
+
+      </div>
+
+    </section>
+
+    <footer>
+      Made with 😭 by <a href="https://www.facebook.com/fantashi68/">The Perfect Name</a>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{{ url_for('static',filename='js/index.js') }}" charset="utf-8"></script>
+  </body>
+</html>

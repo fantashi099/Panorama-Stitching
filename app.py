@@ -8,6 +8,7 @@ from stitch import Stitch
 
 input_arr = []
 
+# Convert raw image from client to server without saving images.
 def img_to_base64_str(img):
     buffered = BytesIO()
     img.save(buffered, format="PNG")
@@ -48,29 +49,29 @@ def display():
 @app.route('/stitch', methods = ['GET','POST'])
 def stitch():
     if request.method == 'POST':
+        try:
+            if request.form['checked'] == 'stitch':
+                global input_arr
+                panorama = Stitch(input_arr)
+                result = panorama.fit_transform()
+                final_result = panorama.crop(result)
 
-        if request.form['checked'] == 'stitch':
-            global input_arr
-            panorama = Stitch(input_arr)
-            result = panorama.fit_transform()
-            final_result = panorama.crop(result)
+                result = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
+                im_pil_result = Image.fromarray(result)
+                img_base64_result = img_to_base64_str(im_pil_result)
 
-            result = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
-            im_pil_result = Image.fromarray(result)
-            img_base64_result = img_to_base64_str(im_pil_result)
+                final_result = cv2.cvtColor(final_result, cv2.COLOR_BGR2RGB)
+                im_pil = Image.fromarray(final_result)
+                img_base64 = img_to_base64_str(im_pil)
 
-            final_result = cv2.cvtColor(final_result, cv2.COLOR_BGR2RGB)
-            im_pil = Image.fromarray(final_result)
-            img_base64 = img_to_base64_str(im_pil)
+            return render_template('public/stitch.html', matched = img_base64, raw = img_base64_result)
+        except:
+            return redirect('/')
+    return redirect('/')
 
-        return render_template('public/stitch.html', matched = img_base64, raw = img_base64_result)
-
-    else:
-        return redirect('/')
-
-@app.route('/test', methods = ['GET','POST'])
-def test():
-    return render_template('public/test.html')
+@app.route('/about', methods = ['GET','POST'])
+def about():
+    return render_template('public/about.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

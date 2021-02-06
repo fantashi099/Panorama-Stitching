@@ -5,9 +5,11 @@
 }
 
 html, body {
-    height: 100%;
+    min-height: 100vh;
     background-color: black;
     text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
 h1, h2, h3 {
@@ -16,7 +18,7 @@ h1, h2, h3 {
   color: #00C4CC;
 }
 
-li, a, p, button{
+li, a, p{
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
   font-size: 16px;
@@ -231,6 +233,7 @@ header {
 
 .title {
   padding-top: 3%;
+  padding-bottom: 3%;
   font-size: 1.5rem;
 }
 
@@ -314,15 +317,136 @@ header {
   background-color: #eeeeee;
 }
 
+#test {
+  padding-bottom: 5%;
+  box-sizing: border-box;
+  text-align: center;
+  background-color: #eeeeee;
+}
+
 .imgbox {
   margin: 2% 0 2%;
 }
 
-.output-display {
-  margin: auto;
-  max-width: 80%;
+.imgbox h3 {
+  color: #f05454;
 }
 
-#panorama {
-  margin: auto;
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  /* margin-bottom: 1rem; */
+}
+
+.column-left, .column-right {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+}
+
+.column-left {
+  flex: 1;
+  margin-right: 2%;
+}
+
+.column-right {
+  flex: 5;
+  border: 1px solid black;
+}
+
+.btn {
+  padding: 6%;
+  margin-bottom: 2rem;
+  color: white;
+  background-color: #222831;
+}
+
+.btn:hover {
+  background-color: #00adb5;
+}
+
+#raw {
+  display: none;
+}
+
+/* About */
+.info-about {
+  padding: 0 28% 0;
+  text-align: justify;
+}
+
+/* Footer */
+footer {
+  background-color: black;
+  padding: 20px;
+  clear: both;
+  position: relative;
+  width: 100%;
+  line-height: 150%;
+  color: #f05454;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+footer a {
+  color: #00C4CC;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* Loading scene */
+#loading {
+	display:    none;
+	position:   absolute;
+	z-index:    100;
+	top:        0;
+	left:       0;
+	height:     200%;
+	width:      100%;
+	background: #03506f
+							url("loading.gif")
+							no-repeat
+              center center;
+}
+
+/* The Modal (background) */
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding-top: 15rem; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+	background-color: #fefefe;
+	margin: auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 30%;
+  text-align: center;
+}
+
+/* The Close Button */
+.close {
+	color: #aaaaaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
 }

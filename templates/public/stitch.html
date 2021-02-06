@@ -6,12 +6,24 @@
   <div class="title">
     <h1>Your Output Images:</h1>
   </div>
-  <div class="imgbox">
-    <img src="{{matched}}" alt="output" id="panorama" style="max-width:100%">
+
+  <div class="row">
+    <div class="column-left">
+      <button class="btn" type="button" id="raw-btn" name="button">Raw Panorama <i class="fas fa-caret-right"></i></button>
+      <button class="btn" type="button" id="crop-btn" name="button">Auto Crop Panorama<i class="fas fa-caret-right"></i></button>
+    </div>
+    <div class="column-right">
+      <div class="imgbox" id="panorama">
+        <h3>Panorama with Crop</h3>
+        <img src="{{matched}}" alt="output_raw"  style="max-width:100%; margin: auto;">
+      </div>
+      <div class="imgbox" id="raw">
+        <h3>Raw Panorama</h3>
+        <img src="{{raw}}" alt="output_crop"  style="max-width:100%; margin: auto;">
+      </div>
+    </div>
   </div>
-  <div class="imgbox">
-    <img src="{{raw}}" alt="output" id="raw" style="max-width:100%">
-  </div>
+
 </section>
 
 {% endblock %}
