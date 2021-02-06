@@ -307,6 +307,6 @@ class Stitch:
     def fit_transform(self):
         """Do all module of class"""
         output = self.stitch()
-        cv2.imwrite('demo/outputCrop5.jpg', self.crop(output))
-        cv2.imwrite('demo/outputRaw5.jpg', output)
+        # cv2.imwrite('demo/outputCrop5.jpg', self.crop(output))
+        # cv2.imwrite('demo/outputRaw5.jpg', output)
         return output
