@@ -1,6 +1,11 @@
+click==7.1.2
 Flask==1.1.2
 imutils==0.5.4
+itsdangerous==1.1.0
+Jinja2==2.11.2
+MarkupSafe==1.1.1
 numpy==1.19.5
 opencv-contrib-python==4.5.1.48
 opencv-python==4.5.1.48
 Pillow==8.1.0
+Werkzeug==1.0.1
