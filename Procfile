@@ -1,1 +1,1 @@
-web: gunicorn wsgi:app
+web: gunicorn --port=$PORT --call 'app:create_app'

@@ -363,10 +363,6 @@ header {
   background-color: #222831;
 }
 
-.btn:hover {
-  background-color: #00adb5;
-}
-
 #raw {
   display: none;
 }
