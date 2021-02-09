@@ -45,7 +45,7 @@ $ python main.py <images_path_dir> <output_path_dir>
 
 Demo1:
 
-![demo1](demo/outputCrop.jpg)
+![demo1](sample.png)
 
 Demo2:
 
